@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aviva: Policy Admin Dashboard — Julia Petretta</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  color: #1a1a1a;
+  background: #fff;
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== BACK TO TOP ===== */
+#back-to-top {
+  position: fixed;
+  bottom: 56px;
+  right: 56px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, transform 0.2s;
+  color: #1a1a1a;
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#back-to-top:hover {
+  background: #1a1a1a;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+/* ===== LAYOUT ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+/* ===== NAV (shared with index-v2) ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+nav .nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  height: 64px;
+}
+nav .name { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; transform: translateY(2px); }
+nav .links { display: flex; gap: 32px; align-items: center; transform: translateY(2px); }
+nav .links a {
+  font-size: 14px; font-weight: 500; color: #1a1a1a;
+  transition: color 0.2s;
+}
+nav .links a:hover { color: #1a1a1a; }
+nav .links .cta {
+  font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a;
+  padding: 8px 20px; border-radius: 100px;
+  transition: background 0.2s;
+}
+nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
+
+/* ===== CASE NAV (back / next) ===== */
+.case-nav { padding-top: 88px; padding-bottom: 0; }
+.case-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.case-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: opacity 0.2s;
+}
+.case-nav-link:hover { opacity: 0.7; }
+.case-nav-link .roundel {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.case-nav-link:hover .roundel {
+  background: #1a1a1a;
+  color: #fff;
+}
+.case-nav-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* ===== CASE STUDY — FIGMA-MATCHED DESIGN SYSTEM ===== */
+
+/* --- Band wrapper --- */
+.case-band { padding: 24px 0; }
+.case-band-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #999;
+  margin-bottom: 16px;
+}
+
+/* --- Card component --- */
+.case-card {
+  background: #f5f5f3;
+  border-radius: 12px;
+  padding: 25px;
+  overflow: hidden;
+}
+.case-card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 12px;
+}
+.case-card-metric {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.case-card-body {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  line-height: 1.6;
+}
+.case-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+}
+.case-card-title-sm {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  margin-bottom: 0;
+}
+
+/* Tall card for images (no forced min-height constraint) */
+.case-card-image {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.case-card-image img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  mix-blend-mode: multiply;
+}
+
+/* Card with image flush to bottom-left corner */
+.case-card-flush {
+  padding: 20px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.case-card-flush .case-card-label {
+  padding-left: 20px;
+}
+.case-flush-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+  padding-left: 20px;
+  margin: 0;
+}
+.case-flush-sub {
+  font-size: 14px;
+  font-weight: 400;
+  color: #555;
+  line-height: 1.4;
+  padding-left: 20px;
+  margin-top: -4px;
+}
+.case-card-flush img {
+  width: 100%;
+  display: block;
+  border-radius: 0;
+  margin-top: auto;
+}
+
+/* Grid layouts */
+.case-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.case-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.case-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* --- Band 1: Hero card --- */
+.case-hero {
+  background: radial-gradient(ellipse 140% 110% at 50% -5%, #eef2fc 0%, #d8e3f9 38%, rgba(148,178,255,0.45) 65%, rgba(112,142,219,0.25) 100%);
+  border-radius: 16px;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  overflow: hidden;
+  position: relative;
+}
+.case-hero-text {
+  padding: 80px 48px 64px 48px;
+  display: flex;
+  flex-direction: column;
+}
+.case-hero-text h1 {
+  font-size: clamp(30px, 3.2vw, 40px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: #1a1a1a;
+  margin-bottom: 28px;
+}
+.case-hero-meta {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.7;
+  margin-bottom: 80px;
+}
+.case-hero-body {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.65;
+  max-width: 440px;
+}
+.case-hero-image {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+}
+.case-hero-image img {
+  width: 110%;
+  max-width: none;
+  transform: translateX(8%);
+}
+
+/* --- Band 3: Problem space card (text top-left, table image bottom) --- */
+.case-problem-card {
+  padding: 40px 40px 0 40px;
+  overflow: hidden;
+  position: relative;
+}
+.case-problem-content {
+  display: grid;
+  grid-template-columns: 0.38fr 0.62fr;
+  gap: 32px;
+  align-items: end;
+}
+.case-problem-text {
+  padding-bottom: 40px;
+}
+.case-problem-text h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  margin-top: 4px;
+}
+.case-problem-text p.intro {
+  font-size: 14px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 340px;
+}
+.case-heuristics-list {
+  list-style: none;
+  padding: 0;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+.case-heuristics-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  line-height: 1.4;
+}
+.case-heuristics-list .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-amber { background: #F6AD55; }
+.dot-yellow { background: #F6D42A; }
+.dot-red { background: #E53E3E; }
+.dot-green { background: #48BB78; }
+.case-problem-table-img {
+  align-self: end;
+}
+.case-problem-table-img img {
+  width: 100%;
+  display: block;
+}
+
+/* --- Band 6: gradient outcome card with laptops --- */
+.case-outcome-gradient {
+  background: radial-gradient(ellipse 140% 110% at 50% -5%, #eef2fc 0%, #d8e3f9 38%, rgba(148,178,255,0.45) 65%, rgba(112,142,219,0.25) 100%);
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 16px;
+}
+.case-outcome-gradient h3 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.case-outcome-gradient .small-print {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 22px;
+}
+.case-outcome-laptops {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: 0 -40px -20px;
+  align-items: flex-end;
+}
+.case-outcome-laptops img {
+  width: 52%;
+  display: block;
+  border-radius: 0;
+  flex-shrink: 0;
+}
+.case-outcome-laptops img:first-child {
+  margin-right: -4%;
+  position: relative;
+  z-index: 1;
+}
+.case-outcome-laptops img:last-child {
+  margin-left: -4%;
+}
+
+/* --- Inline summary/learning cards --- */
+.case-inline-card {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 24px;
+  padding: 28px;
+  align-items: start;
+}
+.case-inline-card .case-card-label {
+  margin-bottom: 0;
+  padding-top: 2px;
+}
+.case-inline-card p {
+  font-size: 14px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* --- Figure caption inside cards --- */
+.case-figure-caption {
+  font-size: 13px;
+  color: #4a5568;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+/* ===== CONTACT / FOOTER (shared with index-v2) ===== */
+.contact {
+  position: relative;
+  text-align: left;
+  padding: 100px 0;
+  background: #1a1a1a;
+  margin-top: 80px;
+}
+.contact-content { position: relative; z-index: 2; }
+.contact h2 {
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,0.9);
+}
+.contact p { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+.contact .cta-btn {
+  display: inline-block;
+  font-size: 14px; font-weight: 600; color: #1a1a1a; background: #fff;
+  padding: 8px 20px; border-radius: 100px;
+  transition: background 0.2s, color 0.2s;
+}
+.contact .cta-btn:hover { background: #9B8FFF; color: #1a1a1a; }
+
+footer { background: #1a1a1a; color: rgba(255,255,255,0.45); padding: 64px 0 48px; }
+.footer-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+}
+.footer-identity h3 { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+.footer-identity .footer-role { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+.footer-identity .footer-note { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.35); font-style: italic; }
+.footer-connect { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+.footer-linkedin {
+  display: flex; align-items: center; gap: 12px;
+  color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.5;
+  transition: color 0.2s;
+}
+.footer-linkedin:hover { color: rgba(255,255,255,0.9); }
+.footer-linkedin svg { flex-shrink: 0; width: 32px; height: 32px; fill: rgba(255,255,255,0.6); transition: fill 0.2s; }
+.footer-linkedin:hover svg { fill: rgba(255,255,255,0.9); }
+.footer-rights { font-size: 12px; color: rgba(255,255,255,0.25); grid-column: 1 / -1; text-align: left; margin-top: 16px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .case-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .case-grid-3 { grid-template-columns: 1fr; }
+  .case-problem-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 900px) {
+  .container { padding: 0 24px; }
+  nav .nav-inner { padding: 0 24px; }
+  .footer-inner { padding: 0 24px; max-width: 1200px; grid-template-columns: 1fr; gap: 32px; }
+  .case-hero { grid-template-columns: 1fr; min-height: auto; }
+  .case-hero-text { padding: 40px 32px; }
+  .case-hero-image img { width: 100%; transform: none; padding: 0 24px 24px; }
+  .case-grid-2 { grid-template-columns: 1fr; }
+  .case-outcome-laptops { grid-template-columns: 1fr; }
+  .case-inline-card { grid-template-columns: 1fr; gap: 8px; }
+}
+@media (max-width: 600px) {
+  .case-grid-4 { grid-template-columns: 1fr; }
+  .case-problem-card { padding: 24px; }
+  nav .links a:not(.cta) { display: none; }
+  .footer-connect { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV (shared) ===== -->
+<nav>
+  <div class="nav-inner">
+    <a class="name" href="index.html">Julia Petretta</a>
+    <div class="links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#approach">About</a>
+      <a href="index.html#talks">Writing & Talks</a>
+      <a href="mailto:julia.petretta@gmail.com" class="cta">Get in touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== CASE NAV ===== -->
+<section class="case-nav">
+  <div class="container">
+    <div class="case-nav-inner">
+      <a class="case-nav-link" href="index.html#work">
+        <span class="roundel">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7H1M6 2L1 7l5 5"/></svg>
+        </span>
+        <span class="case-nav-title">Back</span>
+      </a>
+      <a class="case-nav-link case-nav-link--next" href="plum-onboarding.html">
+        <span class="case-nav-title">Next</span>
+        <span class="roundel">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 1 · HERO
+     ============================================================ -->
+<section class="case-band" style="padding-top: 32px;">
+  <div class="container">
+    <div class="case-hero">
+      <div class="case-hero-text">
+        <h1>Cutting operational<br>cost by 66%</h1>
+        <div class="case-hero-meta">
+          Role: Product Design Manager<br>
+          Client: Aviva<br>
+          Time: 2023 (6 weeks)<br>
+          Team: 1 Product Owner · 3 Engineers · 1 Designer
+        </div>
+        <p class="case-hero-body">Aviva's internal policy admin system was slowing teams down — increasing operational costs and making everyday tasks unnecessarily complex. I led and managed the redesign of a core admin dashboard to simplify workflows, improve speed, and reduce cost at scale.</p>
+      </div>
+      <div class="case-hero-image">
+        <img src="Website assets/00 Aviva case study/UI visuals/1. Hero dashboard - UI.png" alt="Aviva Zero policy admin dashboard — redesigned interface" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 2 · CONTEXT & STATS
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Context</div>
+    <div class="case-grid-4">
+      <div class="case-card">
+        <div class="case-card-label">Key challenge</div>
+        <div class="case-card-metric">1 policy per hour</div>
+        <p class="case-card-body">The workflow was long and repetitive, with unnecessary steps limiting productivity to just one policy update per hour.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Problem statement</div>
+        <div class="case-card-metric">13 steps</div>
+        <p class="case-card-body">Policy admin managers needed 13 steps to complete a single core task.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Key results</div>
+        <div class="case-card-metric">13 → 4 steps</div>
+        <p class="case-card-body">Redesigned UX reduced steps by 66%, enabling faster task completion and improved service efficiency.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Impact</div>
+        <div class="case-card-metric">66% reduction</div>
+        <p class="case-card-body">Streamlined workflows cut operational effort and costs across high-frequency policy tasks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BEFORE / AFTER
+     ============================================================ -->
+<section class="case-band" style="padding-top: 0;">
+  <div class="container">
+    <div class="case-grid-2">
+      <div class="case-card case-card-flush">
+        <h3 class="case-flush-title">Before</h3>
+        <p class="case-flush-sub">Inconsistent layout, weak affordances, 11 type styles</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/3. Before.png" alt="Before — original policy admin interface" />
+      </div>
+      <div class="case-card case-card-flush">
+        <h3 class="case-flush-title">After</h3>
+        <p class="case-flush-sub">Clear hierarchy, consistent grid, decision-driven layout</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/4. After.png" alt="After — redesigned Aviva dashboard" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 3 · DEFINING THE PROBLEM SPACE
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Approach</div>
+
+    <!-- Top: large card — text + dot list top-left, table image bottom-right -->
+    <div class="case-card case-problem-card">
+      <div class="case-problem-content">
+        <div class="case-problem-text">
+          <div class="case-card-label">Understanding the As-Is</div>
+          <h2>Framing the opportunity</h2>
+          <p class="intro">We started with a heuristic analysis to baseline the experience. What we found wasn't just poor UI — it was systemic complexity embedded in the product.</p>
+          <ol class="case-heuristics-list">
+            <li><span class="dot dot-amber"></span>1. Visibility of status</li>
+            <li><span class="dot dot-red"></span>2. Match between system &amp; real world</li>
+            <li><span class="dot dot-red"></span>3. User control and freedom</li>
+            <li><span class="dot dot-yellow"></span>4. Consistency &amp; standards</li>
+            <li><span class="dot dot-red"></span>5. Error prevention</li>
+            <li><span class="dot dot-amber"></span>6. Recognition rather than recall</li>
+            <li><span class="dot dot-yellow"></span>7. Flexibility &amp; efficiency of use</li>
+            <li><span class="dot dot-yellow"></span>8. Aesthetic and minimalist design</li>
+            <li><span class="dot dot-amber"></span>9. Recover from errors</li>
+            <li><span class="dot dot-amber"></span>10. Help &amp; documentation</li>
+          </ol>
+        </div>
+        <div class="case-problem-table-img">
+          <img src="Website assets/00 Aviva case study/UI visuals/2. Heurisitc mark-up.png" alt="Heuristic evaluation table — scoring severity across 10 usability heuristics" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 4 · USER RESEARCH FINDINGS
+     ============================================================ -->
+<section class="case-band" style="padding-top: 0;">
+  <div class="container">
+    <div class="case-grid-3">
+      <div class="case-card case-card-image">
+        <h3 class="case-card-title-sm">Key task flow</h3>
+        <p class="case-card-label" style="margin-bottom: 0; margin-top: -4px;">13 steps to modify a single policy. Observational research showed the most common task took well over an hour, in part due to the convoluted workflow in the existing tool.</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/5.1 13 steps to modify policy.png" alt="Task flow diagram — 13 steps to modify a policy" style="margin-top: -8px; margin-bottom: -20px;" />
+      </div>
+      <div class="case-card case-card-image">
+        <h3 class="case-card-title-sm">Steps per action</h3>
+        <p class="case-card-label" style="margin-bottom: 0; margin-top: -4px;">Most common workflows required 10+ steps. A simple retrieval of customer information took 8 steps of user interactions.</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/5.2 Average steps per action.png" alt="Bar chart — average steps per admin action" style="margin-top: -8px; margin-bottom: -20px;" />
+      </div>
+      <div class="case-card case-card-image">
+        <h3 class="case-card-title-sm">Top task outcomes</h3>
+        <p class="case-card-label" style="margin-bottom: 0; margin-top: -4px;">All top tasks in the existing tool led to policy document updates, meaning finding a customer record was usually followed by updating policy details.</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/5.3 Top task outcomes.png" alt="Table — top tasks all lead to policy document updates" style="margin-top: -8px; margin-bottom: -20px;" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 5 · REDESIGNING THE SYSTEM
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+
+    <div class="case-band-label">From insights to actions</div>
+
+    <!-- Top: 2-col, text card + large IA tree -->
+    <div class="case-grid-2">
+      <div class="case-card" style="padding: 32px;">
+        <h3 class="case-card-title" style="font-size: 28px; letter-spacing: -0.5px;">Redesigning the information system</h3>
+        <p class="case-card-body" style="margin-bottom: 20px;">I reframed the experience around Jobs-to-be-Done, focusing on the primary task: → Modify a customer policy quickly and accurately</p>
+        <p class="case-card-body" style="margin-bottom: 8px;"><strong>From there, I:</strong></p>
+        <ul style="font-size: 14px; color: #555; line-height: 1.55; padding-left: 20px; margin-bottom: 20px;">
+          <li>Reconstructed task flows based on real user behaviour</li>
+          <li>Removed obsolete or duplicated steps</li>
+          <li>Grouped data based on decision-making needs (not backend structure)</li>
+        </ul>
+        <p class="case-card-body" style="margin-bottom: 8px;"><strong>This led to a new information architecture that:</strong></p>
+        <ul style="font-size: 14px; color: #555; line-height: 1.55; padding-left: 20px;">
+          <li>Reduced cognitive load</li>
+          <li>Surfaced key actions earlier</li>
+          <li>Enabled faster decision-making</li>
+        </ul>
+      </div>
+      <div class="case-card case-card-image">
+        <img src="Website assets/00 Aviva case study/UI visuals/6. Information hierarchy.png" alt="New information architecture — grouped data by decision-making needs" />
+      </div>
+    </div>
+
+    <!-- Bottom: 2-col grouping + detailing -->
+    <div class="case-grid-2" style="margin-top: 16px;">
+      <div class="case-card case-card-image">
+        <h3 class="case-card-title-sm">Reduce journey steps</h3>
+        <p class="case-card-label" style="margin-bottom: 0; margin-top: -4px;">A quick wireframe study showed we could group relevant information and complete the main job-to-be-done of modifying a policy in fewer steps.</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/7. Wireframes.png" alt="Wireframe showing information grouping and sequencing" />
+      </div>
+      <div class="case-card case-card-image">
+        <h3 class="case-card-title-sm">Detailed wireframes</h3>
+        <p class="case-card-label" style="margin-bottom: 0; margin-top: -4px;">Data groupings were tested in various arrangements to optimise shortcuts and layout. Spacing and page rhythm between the information grouping accelerated time-to-task.</p>
+        <img src="Website assets/00 Aviva case study/UI visuals/8. Detailing layout.png" alt="Detailed layout mark-up of the redesigned dashboard" style="margin-top: 6px;" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 6 · OUTCOME
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Result</div>
+
+    <!-- gradient card with final UI -->
+    <div class="case-outcome-gradient">
+      <h3>Shipped and operational</h3>
+      <p class="small-print">The new UI was implemented within 8 weeks of the study conclusion. The new UX saved Aviva hundreds of thousands of operational costs.</p>
+      <div class="case-outcome-laptops">
+        <img src="Website assets/00 Aviva case study/UI visuals/9.A Final-UI-1.png" alt="Final redesigned Aviva dashboard — policy details view" />
+        <img src="Website assets/00 Aviva case study/UI visuals/9.b Final-UI-2.png" alt="Final redesigned Aviva dashboard — policy overview view" />
+      </div>
+    </div>
+
+    <!-- Bottom: 2-col summary + key learning -->
+    <div class="case-grid-2" style="margin-top: 16px;">
+      <div class="case-card">
+        <div class="case-card-label">Key learnings</div>
+        <div class="case-card-metric">Design the system, not the screen</div>
+        <p class="case-card-body">Enterprise UX problems are rarely interface problems — they are workflow and system problems. By redesigning the task architecture, not just the UI, we unlocked a 66% reduction in operational cost.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Impact</div>
+        <div class="case-card-metric">Challenge the workflow, not just the layout</div>
+        <p class="case-card-body">Real impact came from questioning why 13 steps existed in the first place — removing unnecessary steps and aligning the product to how people actually work, not how the system was originally built.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ===== CONTACT (shared) ===== -->
+<section class="contact" id="contact">
+  <div class="container contact-content">
+    <h2>Interested in connecting?</h2>
+    <p>Always open to conversations about product, design, and leadership.</p>
+    <a class="cta-btn" href="mailto:julia.petretta@gmail.com">Get in touch</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER (shared) ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-identity">
+      <h3>Julia Petretta</h3>
+      <p class="footer-role">Senior Product Design Leader</p>
+      <p class="footer-note">Case studies upon request.</p>
+    </div>
+    <div class="footer-connect">
+      <a class="footer-linkedin" href="https://www.linkedin.com/in/juliapetretta/" target="_blank">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <span>I write and share my thoughts on LinkedIn.<br>Connect and follow me.</span>
+      </a>
+    </div>
+    <span class="footer-rights">&copy; 2026 All rights reserved.</span>
+  </div>
+</footer>
+
+<!-- ===== FLOATING BACK-TO-TOP BUTTON ===== -->
+<button id="back-to-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13V1M2 6l5-5 5 5"/></svg>
+</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('back-to-top');
+  var threshold = 800;
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('visible', window.scrollY > threshold);
+  });
+})();
+</script>
+
+</body>
+</html>
