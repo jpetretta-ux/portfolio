@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="Plus Jakarta Sans, -apple-system, sans-serif">
+  <!-- Background card -->
+  <rect width="720" height="440" rx="12" fill="#F2F0F5"/>
+
+  <!-- Label -->
+  <text x="40" y="44" font-size="12" font-weight="700" fill="#1a1a1a">USER RESEARCH — 5-SEC COMPREHENSION TEST</text>
+  <text x="40" y="64" font-size="12" font-weight="500" fill="#6b7280">20 participants · February 2025</text>
+
+  <!-- Two big numbers side by side -->
+  <!-- Left: Discovery 58% -->
+  <g transform="translate(40, 110)">
+    <text x="0" y="0" font-size="11" font-weight="700" fill="#4a5568" letter-spacing="1">DISCOVERY</text>
+
+    <text x="0" y="80" font-size="96" font-weight="800" fill="#E53E3E" letter-spacing="-3">58%</text>
+
+    <text x="0" y="118" font-size="15" font-weight="600" fill="#1a1a1a">Could locate the assistant</text>
+    <text x="0" y="138" font-size="15" font-weight="500" fill="#4a5568">entry point in 5 seconds</text>
+  </g>
+
+  <!-- Arrow between -->
+  <g transform="translate(340, 165)">
+    <line x1="0" y1="0" x2="40" y2="0" stroke="#9B8FFF" stroke-width="2"/>
+    <path d="M 40 0 L 30 -6 L 30 6 Z" fill="#9B8FFF"/>
+  </g>
+
+  <!-- Right: Intent 78% -->
+  <g transform="translate(400, 110)">
+    <text x="0" y="0" font-size="11" font-weight="700" fill="#4a5568" letter-spacing="1">INTENT</text>
+
+    <text x="0" y="80" font-size="96" font-weight="800" fill="#48BB78" letter-spacing="-3">78%</text>
+
+    <text x="0" y="118" font-size="15" font-weight="600" fill="#1a1a1a">Could articulate a real</text>
+    <text x="0" y="138" font-size="15" font-weight="500" fill="#4a5568">question they'd actually ask</text>
+  </g>
+
+  <!-- Insight callout at bottom -->
+  <g transform="translate(40, 300)">
+    <rect width="640" height="100" rx="8" fill="#fff"/>
+    <text x="20" y="28" font-size="12" font-weight="700" fill="#9B8FFF" letter-spacing="1">THE INVERSION</text>
+    <text x="20" y="54" font-size="15" font-weight="600" fill="#1a1a1a">
+      <tspan x="20" dy="0">Users couldn't find the assistant easily — but once there,</tspan>
+      <tspan x="20" dy="20">they knew exactly what they'd ask.</tspan>
+    </text>
+    <text x="20" y="94" font-size="13" font-weight="500" fill="#4a5568" font-style="italic">
+      This validated the PDQ approach: users don't need a blank prompt — they need pre-qualified question starters.
+    </text>
+  </g>
+</svg>
