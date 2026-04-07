@@ -62,7 +62,7 @@ nav .links a {
 nav .links a:hover { color: #1a1a1a; }
 nav .links .cta {
   font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a;
-  padding: 8px 16px; border-radius: 12px;
+  padding: 8px 20px; border-radius: 100px;
   transition: background 0.2s;
 }
 nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
@@ -113,21 +113,28 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
   margin-bottom: 16px;
 }
 
-/* ===== INTRO STATEMENT ===== */
+/* ===== INTRO STATEMENT (card) ===== */
 .intro-statement {
-  padding: 56px 0 40px;
+  padding: 24px 0 40px;
   background: #fff;
 }
-.intro-statement p {
+.intro-statement-card {
+  background: #eef1f8;
+  border-radius: 20px;
+  padding: 64px 48px;
+  text-align: center;
+}
+.intro-statement-card p {
   font-size: clamp(20px, 2.2vw, 26px);
   font-weight: 400;
   line-height: 1.55;
   color: #1a1a1a;
   max-width: 780px;
+  margin: 0 auto;
   letter-spacing: -0.3px;
 }
-.intro-statement strong {
-  font-weight: 600;
+.intro-statement-card strong {
+  font-weight: 700;
 }
 
 /* ===== WORK / CASE STUDIES — now comes FIRST ===== */
@@ -230,6 +237,19 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
   text-align: center;
 }
 
+/* Byline — bottom-left, vertically centred with arrow CTA */
+.case-card-byline {
+  position: absolute;
+  bottom: 20px; left: 26px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  font-size: 15px; font-weight: 400;
+  color: rgba(0,0,0,0.55);
+  line-height: 1.4;
+  z-index: 2;
+}
+
 /* Dark card variant — white text */
 .case-card-dark .case-card-company { color: #fff; }
 .case-card-dark .case-card-title { color: rgba(255,255,255,0.55); }
@@ -300,7 +320,7 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
 }
 /* Full-width statement card — side-by-side layout */
 .approach-card {
-  background: #eef0f5;
+  background: #f5f5f3;
   border-radius: 20px;
   overflow: hidden;
   display: grid;
@@ -433,7 +453,7 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
   margin-bottom: 52px;
 }
 .outcome-card {
-  background: #eef0f5;
+  background: #f5f5f3;
   border-radius: 12px;
   padding: 28px 24px 32px;
 }
@@ -471,7 +491,7 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
   gap: 24px;
 }
 .testimonial-card {
-  background: #eef0f5;
+  background: #f5f5f3;
   border-radius: 12px;
   padding: 32px 28px;
   display: flex;
@@ -513,7 +533,7 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
 }
 
 /* ===== TALKS ===== */
-#talks { background: #eef0f5; color: #1a1a1a; }
+#talks { background: #f5f5f3; color: #1a1a1a; }
 #talks .section-label { color: #999; }
 .talks-grid {
   display: grid;
@@ -566,7 +586,7 @@ nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
 .contact .cta-btn {
   display: inline-block;
   font-size: 14px; font-weight: 600; color: #1a1a1a; background: #fff;
-  padding: 8px 16px; border-radius: 12px;
+  padding: 8px 20px; border-radius: 100px;
   transition: background 0.2s, color 0.2s;
 }
 .contact .cta-btn:hover { background: #9B8FFF; color: #1a1a1a; }
@@ -667,7 +687,7 @@ footer {
         <source src="Website assets/Hero reel 1.mov" type="video/quicktime" />
         <source src="Website assets/Hero reel 1.mov" type="video/mp4" />
       </video>
-      <span class="hero-text-wrapper"><span class="hero-text">Product design leadership — from strategy through craft to systems.</span></span>
+      <span class="hero-text-wrapper"><span class="hero-text">Mobile-first digital car insurance — from 0 to 1 to scale</span></span>
     </div>
   </div>
 </section>
@@ -675,7 +695,9 @@ footer {
 <!-- INTRO STATEMENT -->
 <section class="intro-statement">
   <div class="container">
-    <p><strong>I lead design where it's hardest</strong> — complex products, fast-moving teams, and the systems that hold them together.</p>
+    <div class="intro-statement-card">
+      <p>👋🏻 <strong>I'm Julia, I lead design where it's hardest</strong> — complex products, fast-moving teams, and the systems that hold them together.</p>
+    </div>
   </div>
 </section>
 
@@ -751,6 +773,7 @@ footer {
             <div class="case-card-company">Aviva Zero</div>
             <div class="case-card-title">Policy admin dashboard</div>
           </div>
+          <div class="case-card-byline">Reducing operational costs by 66%</div>
           <a class="case-card-cta-circle" href="aviva-policy-admin.html" aria-label="View case study">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
           </a>
@@ -994,6 +1017,8 @@ footer {
 
   var currentIndex = 0;
   var typeSpeed = 40;
+  var activeTypeInterval = null;
+  var activeEraseInterval = null;
 
   function updateDots(index) {
     dots.forEach(function(dot, i) {
@@ -1002,27 +1027,31 @@ footer {
   }
 
   function typeText(el, text, callback) {
+    if (activeTypeInterval) clearInterval(activeTypeInterval);
     el.textContent = '';
     el.style.opacity = '1';
     var i = 0;
-    var interval = setInterval(function() {
+    activeTypeInterval = setInterval(function() {
       el.textContent += text[i];
       i++;
       if (i >= text.length) {
-        clearInterval(interval);
+        clearInterval(activeTypeInterval);
+        activeTypeInterval = null;
         if (callback) callback();
       }
     }, typeSpeed);
   }
 
   function eraseText(el, callback) {
+    if (activeEraseInterval) clearInterval(activeEraseInterval);
     var text = el.textContent;
     var i = text.length;
-    var interval = setInterval(function() {
+    activeEraseInterval = setInterval(function() {
       i--;
       el.textContent = text.substring(0, i);
       if (i <= 0) {
-        clearInterval(interval);
+        clearInterval(activeEraseInterval);
+        activeEraseInterval = null;
         if (callback) callback();
       }
     }, 20);
