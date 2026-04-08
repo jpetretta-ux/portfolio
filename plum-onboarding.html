@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plum: Onboarding & Activation — Julia Petretta</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  color: #1a1a1a;
+  background: #fff;
+  line-height: 1.6;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* ===== BACK TO TOP ===== */
+#back-to-top {
+  position: fixed;
+  bottom: 56px;
+  right: 56px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, transform 0.2s;
+  color: #1a1a1a;
+}
+#back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+#back-to-top:hover {
+  background: #1a1a1a;
+  color: #fff;
+  transform: scale(1.08);
+}
+
+/* ===== LAYOUT ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+/* ===== NAV (shared with index-v2) ===== */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+nav .nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  height: 64px;
+}
+nav .name { font-size: 22px; font-weight: 600; letter-spacing: -0.3px; transform: translateY(2px); }
+nav .links { display: flex; gap: 32px; align-items: center; transform: translateY(2px); }
+nav .links a {
+  font-size: 14px; font-weight: 500; color: #1a1a1a;
+  transition: color 0.2s;
+}
+nav .links a:hover { color: #1a1a1a; }
+nav .links .cta {
+  font-size: 14px; font-weight: 600; color: #fff; background: #1a1a1a;
+  padding: 8px 20px; border-radius: 100px;
+  transition: background 0.2s;
+}
+nav .links .cta:hover { background: #9B8FFF; color: #1a1a1a; }
+
+/* ===== CASE NAV (back / next) ===== */
+.case-nav { padding-top: 88px; padding-bottom: 0; }
+.case-nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.case-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: opacity 0.2s;
+}
+.case-nav-link:hover { opacity: 0.7; }
+.case-nav-link .roundel {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+.case-nav-link:hover .roundel {
+  background: #1a1a1a;
+  color: #fff;
+}
+.case-nav-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* ===== CASE STUDY — FIGMA-MATCHED DESIGN SYSTEM ===== */
+
+/* --- Band wrapper --- */
+.case-band { padding: 24px 0; }
+.case-band-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #999;
+  margin-bottom: 16px;
+}
+
+/* --- Card component --- */
+.case-card {
+  background: #f5f5f3;
+  border-radius: 12px;
+  padding: 25px;
+  overflow: hidden;
+}
+.case-card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 10px;
+}
+.case-card-metric {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  margin-bottom: 12px;
+  letter-spacing: -0.3px;
+}
+.case-card-body {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  line-height: 1.6;
+}
+.case-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  margin-bottom: 12px;
+}
+.case-card-title-sm {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.3px;
+  margin-bottom: 0;
+}
+
+/* Tall card for images */
+.case-card-image {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.case-card-image img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Grid layouts */
+.case-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.case-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.case-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* --- Hero card --- */
+.case-hero {
+  background: linear-gradient(180deg, #8E9AC8 0%, #BFC8E8 100%);
+  border-radius: 20px;
+  min-height: 520px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+  height: 600px;
+}
+.case-hero-text {
+  padding: 52px 0 52px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  z-index: 2;
+}
+.case-hero-text h1 {
+  font-size: clamp(30px, 3.2vw, 40px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: #1a1a1a;
+  margin-bottom: 28px;
+}
+.case-hero-meta {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.case-hero-body {
+  font-size: 15px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.65;
+  max-width: 440px;
+  margin-bottom: 4px;
+}
+.case-hero-body-sm {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1a1a1a;
+  line-height: 1.55;
+}
+.case-hero-image {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 24px 0 0;
+}
+.case-hero-image img {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* --- Approach card (text + visual) --- */
+.case-approach-card {
+  padding: 40px;
+  display: grid;
+  grid-template-columns: 0.35fr 0.65fr;
+  gap: 40px;
+  align-items: start;
+}
+.case-approach-text {
+  max-width: 420px;
+}
+.case-approach-text h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+.case-approach-text p {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+.case-approach-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Outcome gradient card --- */
+.case-outcome-gradient {
+  background: linear-gradient(180deg, #8E9AC8 0%, #BFC8E8 60%, #E4E8F4 100%);
+  border-radius: 16px;
+  padding: 40px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+.case-outcome-gradient h3 {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.case-outcome-gradient .small-print {
+  font-size: 14px;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+  max-width: 640px;
+}
+.case-outcome-screens {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.case-outcome-screens img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+}
+
+/* --- Figure caption --- */
+.case-figure-caption {
+  font-size: 13px;
+  color: #555;
+  margin-top: 12px;
+  line-height: 1.4;
+}
+
+/* ===== CONTACT / FOOTER (shared with index-v2) ===== */
+.contact {
+  position: relative;
+  text-align: left;
+  padding: 100px 0;
+  background: #1a1a1a;
+  margin-top: 80px;
+}
+.contact-content { position: relative; z-index: 2; }
+.contact h2 {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  margin-bottom: 12px;
+  color: rgba(255,255,255,0.9);
+}
+.contact p { font-size: 15px; color: rgba(255,255,255,0.5); margin-bottom: 32px; }
+.contact .cta-btn {
+  display: inline-block;
+  font-size: 14px; font-weight: 600; color: #1a1a1a; background: #fff;
+  padding: 8px 20px; border-radius: 100px;
+  transition: background 0.2s, color 0.2s;
+}
+.contact .cta-btn:hover { background: #9B8FFF; color: #1a1a1a; }
+
+footer { background: #1a1a1a; color: rgba(255,255,255,0.45); padding: 64px 0 48px; }
+.footer-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+}
+.footer-identity h3 { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.9); margin-bottom: 4px; }
+.footer-identity .footer-role { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+.footer-identity .footer-note { font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.35); font-style: italic; }
+.footer-connect { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
+.footer-linkedin {
+  display: flex; align-items: center; gap: 12px;
+  color: rgba(255,255,255,0.6); font-size: 14px; line-height: 1.5;
+  transition: color 0.2s;
+}
+.footer-linkedin:hover { color: rgba(255,255,255,0.9); }
+.footer-linkedin svg { flex-shrink: 0; width: 32px; height: 32px; fill: rgba(255,255,255,0.6); transition: fill 0.2s; }
+.footer-linkedin:hover svg { fill: rgba(255,255,255,0.9); }
+.footer-rights { font-size: 12px; color: rgba(255,255,255,0.25); grid-column: 1 / -1; text-align: left; margin-top: 16px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .case-grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .case-grid-3 { grid-template-columns: 1fr; }
+  .case-approach-card { grid-template-columns: 1fr; gap: 32px; }
+  .case-outcome-screens { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  .container { padding: 0 24px; }
+  nav .nav-inner { padding: 0 24px; }
+  .footer-inner { padding: 0 24px; grid-template-columns: 1fr; gap: 32px; }
+  .case-hero { grid-template-columns: 1fr; min-height: auto; height: auto; }
+  .case-hero-text { padding: 40px 32px; }
+  .case-hero-image img { width: 100%; margin-left: 0; padding: 0 24px 24px; }
+  .case-grid-2 { grid-template-columns: 1fr; }
+  .case-outcome-screens { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .case-grid-4 { grid-template-columns: 1fr; }
+  nav .links a:not(.cta) { display: none; }
+  .footer-connect { align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV (shared) ===== -->
+<nav>
+  <div class="nav-inner">
+    <a class="name" href="index.html">Julia Petretta</a>
+    <div class="links">
+      <a href="index.html#work">Work</a>
+      <a href="index.html#approach">About</a>
+      <a href="index.html#talks">Writing & Talks</a>
+      <a href="mailto:julia.petretta@gmail.com" class="cta">Get in touch</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== CASE NAV ===== -->
+<section class="case-nav">
+  <div class="container">
+    <div class="case-nav-inner">
+      <a class="case-nav-link" href="index.html#work">
+        <span class="roundel">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 7H1M6 2L1 7l5 5"/></svg>
+        </span>
+        <span class="case-nav-title">Back</span>
+      </a>
+      <a class="case-nav-link" href="aviva-policy-admin.html">
+        <span class="case-nav-title">Next</span>
+        <span class="roundel">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h12M8 2l5 5-5 5"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 1 · HERO
+     ============================================================ -->
+<section class="case-band" style="padding-top: 32px;">
+  <div class="container">
+    <div class="case-hero">
+      <div class="case-hero-text">
+        <h1>From drop-off data to activation design</h1>
+        <div class="case-hero-meta">
+          Role: Staff Product Designer (sole design lead)<br>
+          Company: Plum<br>
+          Time: 2024–2025<br>
+          Team: 1 PM · 4 Engineers · 1 EM · 1 Staff Designer
+        </div>
+        <div style="margin-top: auto;">
+          <p class="case-hero-body">Plum needed to turn sign-ups into savers — redesigning the first experience for 2M+ users across 10 markets.</p>
+          <p class="case-hero-body-sm"><em>Featured talk:</em> Presenting learnings from this work at UX London 2026</p>
+        </div>
+      </div>
+      <div class="case-hero-image">
+        <img src="Website assets/Plum Onboarding/1. Hero-Onboarding.png" alt="Plum onboarding — welcome screen and purpose selector" onerror="this.style.display='none'" />
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 2 · CONTEXT — 4 deduplicated cards, each unique angle
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Context</div>
+    <!-- Regulatory complexity — scene-setter with KYC table -->
+    <div class="case-card case-approach-card" style="margin-bottom: 16px; padding-top: 32px; padding-bottom: 32px;">
+      <div class="case-approach-text">
+        <div class="case-card-label">Regulatory complexity</div>
+        <h2>Why the personal details step was broken</h2>
+        <p>Plum was growing fast — 2M+ users across 10 markets, £6.7M revenue in 2024 — but the onboarding funnel had a problem hiding in plain sight.</p>
+        <p>Personal details carried KYC requirements for 10+ products across UK and EU — each with different data demands. One form was trying to serve every regulatory regime at once.</p>
+      </div>
+      <div style="margin-right: -40px; overflow: hidden; border-radius: 12px 0 0 12px;">
+        <img src="Website assets/Plum Onboarding/2. Regulatory requirements.png" alt="UK and EU product onboarding requirements — KYC field matrix showing different data demands per product" style="width: 110%; max-width: none; display: block;" onerror="this.style.display='none'" />
+      </div>
+    </div>
+
+    <div class="case-grid-4">
+      <div class="case-card">
+        <div class="case-card-label">Business scale</div>
+        <div class="case-card-metric">£6.7M revenue</div>
+        <p class="case-card-body">Nearly doubled YoY across 10 markets. Every point of onboarding conversion directly impacted growth.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Funnel health</div>
+        <div class="case-card-metric">68% completion</div>
+        <p class="case-card-body">Personal details had a 42% error rate — the single biggest drop-off point in the entire onboarding funnel.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">User research</div>
+        <div class="case-card-metric">480 respondents</div>
+        <p class="case-card-body">Surveyed across 3 channels. 17% cited unwanted direct debit, 16% cited complexity. Qual matched quant.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Business impact</div>
+        <div class="case-card-metric">40% non-depositors</div>
+        <p class="case-card-body">Blocked at account connection. Solving this represented 6,900–14,300 incremental conversions per month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 3 · WHAT THE DATA SHOWED — diagnosis beat
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Diagnosis</div>
+
+    <!-- Two chart cards -->
+    <div class="case-grid-2">
+      <div class="case-card" style="padding: 32px; display: flex; flex-direction: column;">
+        <div class="case-card-label">Data findings</div>
+        <h3 class="case-card-title-sm">Funnel performance per screen</h3>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 320px;">
+          <img src="Website assets/Plum Onboarding/3.1 Funnel data.png" alt="Funnel performance per screen — weekly bar chart showing drop-off at each onboarding step" style="max-width: 100%; max-height: 360px; object-fit: contain; mix-blend-mode: multiply;" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <div class="case-card" style="padding: 32px; display: flex; flex-direction: column;">
+        <div class="case-card-label">Data findings</div>
+        <h3 class="case-card-title-sm">Funnel performance over time</h3>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center; min-height: 320px;">
+          <img src="Website assets/Plum Onboarding/3.2 Funnel data.png" alt="Funnel performance over time — personal details completion trending up" style="max-width: 100%; max-height: 360px; object-fit: contain; mix-blend-mode: multiply;" onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Journey map — full width -->
+    <div class="case-card case-approach-card" style="margin-top: 16px;">
+      <div class="case-approach-text">
+        <div class="case-card-label">Mapping the experience</div>
+        <h2>Three problems hiding in one funnel</h2>
+        <p>The data pointed to a single broken step, but the journey map revealed three distinct failure modes converging at the same point:</p>
+        <ul style="font-size: 14px; color: #555; line-height: 1.55; padding-left: 20px; list-style: disc;">
+          <li style="margin-bottom: 12px;"><strong>Account connection failures</strong> — ~40% of non-depositors blocked here. Bank not supported, connection failing, or user hesitant to link.</li>
+          <li style="margin-bottom: 12px;"><strong>No control over deposit amount</strong> — 17% of detractors cited unwanted direct debits.</li>
+          <li><strong>Commitment asked too early</strong> — users giving personal details before choosing the product they came for.</li>
+        </ul>
+      </div>
+      <div style="margin-right: -52px;">
+        <div style="overflow: hidden; border-radius: 12px 0 0 12px; min-height: 380px;">
+          <img src="Website assets/Plum Onboarding/4. Customer journey map.png" alt="Customer journey map showing user emotional states across onboarding steps" style="width: 140%; height: 100%; object-fit: cover; display: block;" onerror="this.style.display='none'" />
+        </div>
+        <p class="case-figure-caption" style="margin-top: 8px; padding-right: 40px; padding-left: 8px;">Emotional state mapped against each onboarding step, from sign-up to bank linking.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 4 · IMMEDIATE FIXES — before/after + bank linking + results
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Immediate fixes</div>
+
+    <!-- Before/after: Personal details + Purpose selector + Bank linking -->
+    <div class="case-grid-3">
+      <div class="case-card" style="padding: 0; display: flex; flex-direction: column;">
+        <div style="padding: 25px 25px 16px;">
+          <h3 class="case-card-title-sm" style="margin-bottom: 8px;">Personal details</h3>
+          <p class="case-card-body">Consolidated fields, improved scan-ability with headlines, better input affordance and information grouping.</p>
+        </div>
+        <img src="Website assets/Plum Onboarding/5.1 Personal details.png" alt="Personal Details — before and after" style="width: 100%; display: block; border-radius: 0 0 12px 12px; margin-top: auto;" onerror="this.style.display='none'" />
+      </div>
+      <div class="case-card" style="padding: 0; display: flex; flex-direction: column;">
+        <div style="padding: 25px 25px 16px;">
+          <h3 class="case-card-title-sm" style="margin-bottom: 8px;">Purpose selector</h3>
+          <p class="case-card-body">Moved earlier so users choose their product before committing. Clearer feature descriptions with card selectors.</p>
+        </div>
+        <img src="Website assets/Plum Onboarding/5.2 Purpose.png" alt="Purpose Selector — before and after" style="width: 100%; display: block; border-radius: 0 0 12px 12px; margin-top: auto;" onerror="this.style.display='none'" />
+      </div>
+      <div class="case-card" style="padding: 0; display: flex; flex-direction: column;">
+        <div style="padding: 25px 25px 16px;">
+          <h3 class="case-card-title-sm" style="margin-bottom: 8px;">Skippable bank linking</h3>
+          <p class="case-card-body">Removed bank linking as mandatory. Users who skip are guided through the home screen to complete at their own pace.</p>
+        </div>
+        <img src="Website assets/Plum Onboarding/5.3 Bank linking.png" alt="Bank linking — before and after showing skippable flow" style="width: 100%; display: block; border-radius: 0 0 12px 12px; margin-top: auto;" onerror="this.style.display='none'" />
+      </div>
+    </div>
+
+    <!-- Inline results — the payoff -->
+    <div class="case-grid-4" style="margin-top: 16px;">
+      <div class="case-card">
+        <div class="case-card-label">Completion</div>
+        <div class="case-card-metric">68% → 88%</div>
+        <p class="case-card-body">Personal details completion over a 6-month window (Looker)</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Error rate</div>
+        <div class="case-card-metric">42% → 23%</div>
+        <p class="case-card-body">Error rate on personal details nearly halved</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Revenue impact</div>
+        <div class="case-card-metric">+40% per customer</div>
+        <p class="case-card-body">Revenue per customer growth, contributing to £6.7M in 2024</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Scale</div>
+        <div class="case-card-metric">10 markets</div>
+        <p class="case-card-body">End-to-end flow shipped across iOS &amp; Android in all markets</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 5 · STRATEGIC REFRAME — routing + intent in one band
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Strategic reframe</div>
+
+    <!-- Routing diagram — full width -->
+    <div class="case-card" style="padding: 40px;">
+      <div class="case-card-label">From drop-offs to intent</div>
+      <h2 style="font-size: 28px; font-weight: 800; color: #1a1a1a; line-height: 1.25; letter-spacing: -0.5px; margin-bottom: 20px;">Separating onboarding from activation</h2>
+      <p style="font-size: 14px; font-weight: 500; color: #555; line-height: 1.6; margin-bottom: 24px; max-width: 640px;">The tactical fixes revealed a deeper pattern: users arrived with different goals and trust levels, yet the flow treated everyone the same. We separated the journey into two design problems — <em>onboarding</em> (identity, compliance, setup) and <em>activation</em> (reaching first value) — giving the team a shared language and each metric its own levers.</p>
+      <img src="Website assets/Plum Onboarding/12. Activation.png" alt="Onboarding screen sequence — from welcome through personal details and purpose selection to bank linking decision point" style="width: 100%; border-radius: 8px; display: block;" onerror="this.style.display='none'" />
+    </div>
+
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 6 · ACTIVATION DESIGN — home screen mini-band
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Activation design</div>
+
+    <!-- Analysis: combined home screen study -->
+    <div class="case-card case-approach-card">
+      <div class="case-approach-text">
+        <div class="case-card-label">Redesigning the home screen</div>
+        <h2>Where onboarding ends and engagement begins</h2>
+        <p>The home screen is every user's first landing after signup. It has to welcome, orient, and nudge toward the next meaningful action — but without modularity, there was no way to flex the experience by intent or trust level, and engagement was dropping off.</p>
+        <p>We restructured it around an inverted hierarchy of needs: see your money first, then discover more. It also needed to serve two trust states — users who linked their bank needed reinforcement, while those who skipped needed to build confidence from scratch.</p>
+      </div>
+      <div style="overflow: hidden;">
+        <img src="Website assets/Plum Onboarding/Home screen study-v3.png" alt="Home screen analysis — hierarchy of needs, trust states, and information architecture" style="width: 100%; border-radius: 8px; display: block;" onerror="this.style.display='none'" />
+      </div>
+    </div>
+
+    <!-- Before / After home screen cards — 1/3 + 2/3 (Aviva pattern) -->
+    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 16px; margin-top: 16px;">
+      <div class="case-card" style="padding: 32px 32px 0; display: flex; flex-direction: column; gap: 20px; overflow: hidden;">
+        <div>
+          <h4 style="font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px;">Before</h4>
+          <p class="case-card-body">6 competing sections, ~20 journey prompts, no hierarchy. Users scanned the full screen just to find their balance.</p>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: auto;">
+          <img src="Website assets/Plum Onboarding/11.A Home - Before.png" alt="Plum home screen — before redesign" style="width: 100%; display: block; border-radius: 8px 8px 0 0;" onerror="this.style.display='none'" />
+        </div>
+      </div>
+      <div class="case-card" style="padding: 32px 32px 0; display: flex; flex-direction: column; gap: 20px; overflow: hidden;">
+        <div>
+          <h4 style="font-size: 22px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px;">After</h4>
+          <p class="case-card-body">Modular layout responding to user intent and trust state: balance always visible, actions contextual to segment, progressive disclosure replacing the wall of prompts.</p>
+        </div>
+        <div style="display: flex; justify-content: center; margin-top: auto;">
+          <img src="Website assets/Plum Onboarding/11.B Home After.png" alt="Plum home screen — after redesign" style="width: 100%; display: block; border-radius: 8px 8px 0 0;" onerror="this.style.display='none'" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 7 · OUTCOME — gradient card with shipped screens
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+    <div class="case-band-label">Result</div>
+
+    <div class="case-outcome-gradient">
+      <h3>From sign-up to saver</h3>
+      <p class="small-print">The redesigned flow went live for 2M+ users on iOS and Android. By separating onboarding from activation and designing for intent, we extended the framework into financial product onboarding — the right product, at the right moment. Completion lifted 20 points, error rates halved, and the team had a durable model for future work.</p>
+      <div style="margin: 0 -80px -40px; display: flex; justify-content: center;">
+        <img src="Website assets/Plum Onboarding/13. Activation.png" alt="Plum — shipped onboarding and activation screens" style="width: 100%; display: block; border-radius: 0 0 16px 16px;" onerror="this.style.display='none'" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     BAND 8 · KEY LEARNINGS
+     ============================================================ -->
+<section class="case-band">
+  <div class="container">
+
+    <div class="case-grid-2">
+      <div class="case-card">
+        <div class="case-card-label">Key learning</div>
+        <div class="case-card-metric">Design for intent, not just completion</div>
+        <p class="case-card-body">Separating onboarding from activation gave the team two measurable problems instead of one vague funnel — and unlocked a 20-point completion lift.</p>
+      </div>
+      <div class="case-card">
+        <div class="case-card-label">Approach</div>
+        <div class="case-card-metric">Start where the data is loudest</div>
+        <p class="case-card-body">The strategic reframe didn't come from a workshop — it came from fixing a broken form and noticing the pattern underneath. Tactical work <em>is</em> strategic work when you're paying attention.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ===== CONTACT (shared) ===== -->
+<section class="contact" id="contact">
+  <div class="container contact-content">
+    <h2>Interested in connecting?</h2>
+    <p>Always open to conversations about product, design, and leadership.</p>
+    <a class="cta-btn" href="mailto:julia.petretta@gmail.com">Get in touch</a>
+  </div>
+</section>
+
+<!-- ===== FOOTER (shared) ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-identity">
+      <h3>Julia Petretta</h3>
+      <p class="footer-role">Senior Product Design Leader</p>
+      <p class="footer-note">Case studies upon request.</p>
+    </div>
+    <div class="footer-connect">
+      <a class="footer-linkedin" href="https://www.linkedin.com/in/juliapetretta/" target="_blank">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        <span>I write and share my thoughts on LinkedIn.<br>Connect and follow me.</span>
+      </a>
+    </div>
+    <span class="footer-rights">&copy; 2026 All rights reserved.</span>
+  </div>
+</footer>
+
+<!-- ===== FLOATING BACK-TO-TOP BUTTON ===== -->
+<button id="back-to-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13V1M2 6l5-5 5 5"/></svg>
+</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('back-to-top');
+  var threshold = 800;
+  window.addEventListener('scroll', function(){
+    btn.classList.toggle('visible', window.scrollY > threshold);
+  });
+})();
+</script>
+
+</body>
+</html>
